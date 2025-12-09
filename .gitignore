@@ -5,3 +5,9 @@ invoke_mcp_tools.py
 mcp_server.py
 my_mcp_client.py
 my_mcp_client_remote.py
+README(1).md
+README(2).md
+.env
+uv.lock
+.idea
+/README(1).md
