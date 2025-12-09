@@ -5,13 +5,20 @@ description = "Add your description here"
 requires-python = ">=3.12"
 dependencies = [
     "bedrock-agentcore>=1.1.1",
-    "bedrock-agentcore-starter-toolkit>=0.2.2",
-    "boto3>=1.42.4",
-    "mcp>=1.23.1",
+    "bedrock-agentcore-starter-toolkit>=0.2.3",
+    "boto3>=1.42.5",
+    "mcp>=1.23.3",
     "pytube>=15.0.0",
     "strands-agents>=1.19.0",
     "strands-agents-tools>=0.2.17",
     "pytube2",
     "jupyter>=1.1.1",
-    "boto3-stubs==1.42.4",
+    "boto3-stubs==1.42.5",
 ]
+
+[tool.setuptools]
+py-modules = ["mcp_server"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+exclude = ["images*", "notebooks*"]
