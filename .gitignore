@@ -11,3 +11,5 @@ README(2).md
 uv.lock
 .idea
 /README(1).md
+/build_club_mcp.egg-info/
+/build/
