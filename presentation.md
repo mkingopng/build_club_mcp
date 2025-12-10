@@ -397,7 +397,6 @@ The “mental model” summary slide.
 ---
 
 # Workshop Flow
-- Part 1: Presentation (this deck)  
 - Part 2: Notebook demo  
   - Configure Runtime  
   - Deploy agent  
