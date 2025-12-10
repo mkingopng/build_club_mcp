@@ -13,3 +13,4 @@ uv.lock
 /README(1).md
 /build_club_mcp.egg-info/
 /build/
+/strands_claude.py
