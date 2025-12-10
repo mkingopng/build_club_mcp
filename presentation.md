@@ -26,7 +26,7 @@ class: lead
 4. Local testing → production deployment  
 - Hosting MCP servers & tools
 
-<!-- presenter 
+<!-- 
 This talk sets up the “why” behind AgentCore, then shows how Runtime and 
 Gateway solve the real scaling, tooling, and security challenges customers face 
 when moving from POCs into production. 
@@ -49,8 +49,9 @@ The notebook demo will cover configuration, deployment, and MCP server hosting
 - Integrated features: Knowledge Bases (RAG), workflows, prompt mgmt  
 - Secure, private deployment with no data leaving your AWS boundary
 
-<!-- presenter 
-Bedrock is the *base layer* for modern AI applications. 
+<!-- 
+Bedrock is the *base layer* for modern AI applications.
+
 AgentCore builds on top of this:
 - Bedrock gives you the models, guardrails, evals, and RAG tooling, 
 - AgentCore gives you the *runtime* for agents, tools, and MCP servers.
@@ -65,7 +66,7 @@ AgentCore builds on top of this:
 - Defines transport (stdio / WebSocket / streamable HTTP) and message schema  
 - Allows agents to call tools safely, consistently, and across ecosystems
 
-<!-- presenter
+<!--
 Tools are NOT an AgentCore invention.  
 MCP is the *cross-platform standard* for tool definition, discovery, input 
 validation, and invocation.  
@@ -89,8 +90,8 @@ whole ecosystem interoperable.
 - Agent frameworks (Strands, LangGraph, CrewAI) consume MCP tools consistently  
 - AgentCore Runtime & Gateway rely on MCP contracts for compatibility
 
-<!-- presenter
-This settles any underlying confusion:
+<!-- 
+To settle any underlying confusion:
 - Tools exist everywhere  
 - But *MCP tools follow a protocol* that allows:
   - listing tools
@@ -122,7 +123,7 @@ Both depend on MCP as the unifying standard abstraction layer.
 - Tools can multiply fast → M×N integrations  
 - Multiple teams want to reuse tools safely
 
-<!-- presenter 
+<!-- 
 This is the key customer pain point: POCs feel magical, but production workloads need 
 	- auth, 
 	- auditability, 
@@ -144,7 +145,7 @@ relevant. AgentCore builds on top of those existing tools
 - Bring any framework, any model  
 - Handles the undifferentiated heavy lifting
 
-<!-- presenter
+<!--
 Released in July 2025 in Preview. Released GA in November 
 
 The AWS pitch: “AgentCore exists to remove the undifferentiated heavy lifting: 
@@ -161,7 +162,7 @@ environment isolation, etc.”
   (long-running tasks up to 8 hrs)  
 - Works with any Model and any agent framework
 
-<!-- presenter
+<!--
 Highlight: Session isolation is a *hard* security boundary — each session runs 
 in its own Firecracker micro-VM. This is far beyond typical container reuse in 
 serverless. 
@@ -178,7 +179,7 @@ or background batch jobs).
 - Only pay for active compute time  
 - Automatic compatibility with observability stack
 
-<!-- presenter 
+<!-- 
 Runtime pricing is consumption-based; container cold starts are minimal; and 
 CloudWatch GenAI Observability is integrated out-of-the-box.
 -->
@@ -191,7 +192,7 @@ CloudWatch GenAI Observability is integrated out-of-the-box.
 - Versioning, patching, scaling dozens of MCP servers  
 - Hard to share tools across teams safely
 
-<!-- presenter 
+<!-- 
 This slide bridges to the Gateway: customers tried deploying many MCP servers 
 manually and quickly hit the limits: auth, scaling, version upgrades, tool 
 discovery, governance.
@@ -204,7 +205,7 @@ discovery, governance.
 - Semantic tool search (avoid context blow)  
 - Built-in OAuth for inbound + outbound access
 
-<!-- presenter
+<!--
 Gateway is transformative: it “MCP-ifies” targets (OpenAPI spec, Lambda, Smithy) instantly. 
 Outbound authorizers allow Gateway to call Slack, internal APIs, etc., using 
 the correct (safely stored credentials. 
@@ -228,7 +229,7 @@ Semantic search reduces hallucinations and improves tool-selection accuracy.
 - **Governance**: control which clients use which tools  
 - **Serverless**: unlimited gateways, pay per request
 
-<!-- presenter 
+<!-- 
 AWS’ vision: MCP becomes like TCP/UDP — plumbing no one thinks about.
 
 Gateway is the part that makes MCP safe, scalable, and production-ready.
@@ -246,9 +247,11 @@ Gateway is the part that makes MCP safe, scalable, and production-ready.
 - You want agents, not developers, choosing tools  
 - You want standardized contracts across teams
 
-<!--presenter
+<!--
 Gateway doesn't replace APIs. It exposes them to agents in a standardized MCP 
-protocol. Tools become reusable internal “primitives” instead of one-off API 
+protocol. 
+
+Tools become reusable internal “primitives” instead of one-off API 
 integrations.
 -->
 
@@ -260,8 +263,8 @@ integrations.
 - Deploy to Runtime when stable  
 - Same code, zero changes required
 
-<!-- presenter
-Explain that local testing uses streamable HTTP or stdio. Deployment just wraps 
+<!--
+local testing uses streamable HTTP or stdio. Deployment just wraps 
 your agent entrypoint with the AgentCore SDK and ships it as a container.
 -->
 
@@ -273,7 +276,7 @@ your agent entrypoint with the AgentCore SDK and ships it as a container.
 3. Build → ECR → Runtime endpoint  
 4. Invoke with CLI / SDK / app
 
-<!-- presenter 
+<!-- 
 In the notebook demo I'll show the entire flow: configure, launch, status 
 polling, then invoking through Bedrock APIs.
 -->
@@ -286,7 +289,7 @@ polling, then invoking through Bedrock APIs.
 - Deploy like any Runtime agent  
 - Test via MCP Inspector or remote client
 
-<!-- presenter 
+<!-- 
 Runtime hosts *your MCP server* (not just AgentCore Gateway). This is ideal for 
 custom tools that aren’t expressible as OpenAPI specs.
 -->
@@ -299,7 +302,7 @@ custom tools that aren’t expressible as OpenAPI specs.
 - Supports Cognito, Auth0, Okta, etc.  
 - Credentials stored & rotated automatically
 
-<!-- presenter
+<!--
 This solves a HUGE pain: before, every MCP server needed its own auth 
 implementation.
 
@@ -323,7 +326,7 @@ the pain of complex authentication work.
 - Prevents context saturation from large tool libraries  
 - Improves accuracy & reduces hallucination
 
-<!-- presenter 
+<!-- 
 Lazy loading is critical in large orgs with 100–500 tools.  
 Without lazy loading, all tool definitions get injected into 
 the model context → token bloat, latency spikes, degraded 
@@ -339,7 +342,7 @@ the model only "sees" tools that matter.
 - Agents may forget to call tools without scaffolding  
 - No lazy loading = degraded performance & higher cost
 
-<!-- presenter 
+<!-- 
 If an org eagerly loads all tools, performance tanks and 
 models hallucinate. Gateway + lazy loading solve this by 
 only surfacing relevant tools at runtime.
@@ -353,7 +356,7 @@ only surfacing relevant tools at runtime.
 - Cloud: low-cost invocations  
 - Use CloudWatch GenAI Observability for traces
 
-<!-- presenter
+<!--
 This reassures beginners that cloud testing is not expensive. Also mention that 
 traces allow them to see agent → tool → model behaviour step-by-step.
 -->
@@ -366,7 +369,7 @@ traces allow them to see agent → tool → model behaviour step-by-step.
 - Model inference: standard Bedrock pricing  
 - Easy to scale down (serverless everything)
 
-<!-- presenter
+<!--
 Customers love the fact that cost correlates directly with usage. No idle 
 servers.
 -->
@@ -380,7 +383,7 @@ servers.
 - Expose enterprise APIs via Gateway  
 - Use semantic search + OAuth for production safety
 
-<!-- presenter
+<!--
 The “mental model” summary slide.
 -->
 
@@ -402,14 +405,10 @@ The “mental model” summary slide.
   - Test via MCP Inspector & remote client  
   - Explore Gateway concepts
 
-<!-- presentation
+<!--
 Set expectations: the notebook does the hands-on heavy lifting.
 -->
 ---
 
 # Q&A
 Ask anything about Runtime, Gateway, MCP, deployment, auth, or real-world use cases.
-
-<!-- presenter 
-Keep this short. transition to the workshop/demo notebook next.
--->
