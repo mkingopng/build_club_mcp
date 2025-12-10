@@ -10,6 +10,14 @@ class: lead
 
 ---
 
+# QR Code
+
+<div align="center">
+  <img src="images/build_club_qrcode.png" width="450">
+</div>
+
+---
+
 # Agenda
 
 1. Bedrock overview  
