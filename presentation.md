@@ -34,6 +34,13 @@ when moving from POCs into production.
 The notebook demo will cover configuration, deployment, and MCP server hosting
 -->
 ---
+# AI Agents in a nutshell
+
+<div align="center">
+  <img src="images/ai_agents_in_a_nutshell.png" width="80%">
+</div>
+
+---
 
 # What is Amazon Bedrock?
 
@@ -99,6 +106,14 @@ Gateway exposes *APIs* as MCP tools.
 
 Both depend on MCP as the unifying standard abstraction layer.
 -->
+---
+
+# The official benefits
+
+<div align="center">
+  <img src="images/runtime_feature_summary.png" width="842">
+</div>
+
 ---
 
 # The Challenge: From POC → Production
@@ -196,6 +211,14 @@ the correct (safely stored credentials.
 
 Semantic search reduces hallucinations and improves tool-selection accuracy.
 -->
+
+---
+# AgentCore Gateway Overview 
+
+<div align="center">
+  <img src="images/agentcore_gateway_overview.png" width="75%">
+</div>
+
 ---
 
 # Why Gateway Matters
@@ -286,8 +309,15 @@ the pain of complex authentication work.
 
 ---
 
-# Semantic Tool Search & Lazy Loading
+# Authentication Workflow
 
+<div align="center">
+  <img src="images/gateway_secure_access_model.png" width="80%">
+</div>
+
+---
+
+# Semantic Tool Search & Lazy Loading
 - LLM queries tools by meaning, not raw names  
 - Lazy loading: tools are fetched only when relevant  
 - Prevents context saturation from large tool libraries  
@@ -302,7 +332,6 @@ the model only "sees" tools that matter.
 -->
 
 ---
-
 # Common Pitfalls
 
 - Too many tools loaded eagerly → context saturation  
@@ -354,6 +383,13 @@ servers.
 <!-- presenter
 The “mental model” summary slide.
 -->
+
+---
+# Production architecture
+
+<div align="center">
+  <img src="images/production_ready_agents.png" width="80%">
+</div>
 
 ---
 
