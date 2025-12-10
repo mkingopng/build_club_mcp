@@ -1,40 +1,33 @@
-# Hosting Strands Agents with Amazon Bedrock models in Amazon Bedrock AgentCore Runtime
-
-## Overview
-
-In this tutorial we will learn how to host your existing agent, using Amazon Bedrock AgentCore Runtime. 
-
-We will focus on a Strands Agents with Amazon Bedrock model example. For LangGraph with Amazon Bedrock model check [here](../02-langgraph-with-bedrock-model)
-and for a Strands Agents with an OpenAI model check [here](../03-strands-with-openai-model).
 
 
-### Tutorial Details
+If you get stuck with an issue around roles, and have to nuke them, run this from your console
 
-| Information         | Details                                                                          |
-|:--------------------|:---------------------------------------------------------------------------------|
-| Tutorial type       | Conversational                                                                   |
-| Agent type          | Single                                                                           |
-| Agentic Framework   | Strands Agents                                                                   |
-| LLM model           | Anthropic Claude Haiku 4.5                                                        |
-| Tutorial components | Hosting agent on AgentCore Runtime. Using Strands Agent and Amazon Bedrock Model |
-| Tutorial vertical   | Cross-vertical                                                                   |
-| Example complexity  | Easy                                                                             |
-| SDK used            | Amazon BedrockAgentCore Python SDK and boto3                                     |
+```bash
+for ROLE in $(aws iam list-roles \
+  --query "Roles[?starts_with(RoleName, 'AmazonBedrockAgentCoreSDK')].RoleName" \
+  --output text); do
+  echo "🔪 Cleaning up role: $ROLE"
 
-### Tutorial Architecture
+  # Delete inline policies
+  for P in $(aws iam list-role-policies --role-name "$ROLE" --query "PolicyNames[]" --output text); do
+    echo "  - Deleting inline policy: $P"
+    aws iam delete-role-policy --role-name "$ROLE" --policy-name "$P"
+  done
 
-In this tutorial we will describe how to deploy an existing agent to AgentCore runtime. 
+  # Detach managed policies
+  for ARN in $(aws iam list-attached-role-policies --role-name "$ROLE" --query "AttachedPolicies[].PolicyArn" --output text); do
+    echo "  - Detaching managed policy: $ARN"
+    aws iam detach-role-policy --role-name "$ROLE" --policy-arn "$ARN"
+  done
 
-For demonstration purposes, we will  use a Strands Agent using Amazon Bedrock models
+  # Delete the role
+  echo "  - Deleting role: $ROLE"
+  aws iam delete-role --role-name "$ROLE"
+done
+```
 
-In our example we will use a very simple agent with two tools: `get_weather` and `get_time`. 
+also clean up the local config
+```bash
+rm -f .bedrock_agentcore.yaml
+```
 
-<div style="text-align:left">
-    <img src="images/architecture_runtime.png" width="100%"/>
-</div>
-
-### Tutorial Key Features
-
-* Hosting Agents on Amazon Bedrock AgentCore Runtime
-* Using Amazon Bedrock models
-* Using Strands Agents
