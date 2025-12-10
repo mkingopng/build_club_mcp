@@ -1,33 +1,129 @@
+# MCP Server on Amazon Bedrock AgentCore Runtime (Minimal README)
 
+This project demonstrates how to **build, test, and deploy an MCP (Model Context Protocol) server** onto **Amazon Bedrock AgentCore Runtime** with **OAuth (Cognito) authentication**.
+It also includes local and remote MCP clients for testing tool discovery and invocation.
 
-If you get stuck with an issue around roles, and have to nuke them, run this from your console
+---
 
-```bash
-for ROLE in $(aws iam list-roles \
-  --query "Roles[?starts_with(RoleName, 'AmazonBedrockAgentCoreSDK')].RoleName" \
-  --output text); do
-  echo "🔪 Cleaning up role: $ROLE"
+## Features
 
-  # Delete inline policies
-  for P in $(aws iam list-role-policies --role-name "$ROLE" --query "PolicyNames[]" --output text); do
-    echo "  - Deleting inline policy: $P"
-    aws iam delete-role-policy --role-name "$ROLE" --policy-name "$P"
-  done
+* MCP Server built with **FastMCP**
+* Three example tools:
 
-  # Detach managed policies
-  for ARN in $(aws iam list-attached-role-policies --role-name "$ROLE" --query "AttachedPolicies[].PolicyArn" --output text); do
-    echo "  - Detaching managed policy: $ARN"
-    aws iam detach-role-policy --role-name "$ROLE" --policy-arn "$ARN"
-  done
+  * `add_numbers`
+  * `multiply_numbers`
+  * `greet_user`
+* Local MCP client for testing
+* Cognito-secured AgentCore Runtime deployment
+* Remote client with automatic JWT refresh
+* End-to-end demo: build → deploy → authenticate → invoke tools
 
-  # Delete the role
-  echo "  - Deleting role: $ROLE"
-  aws iam delete-role --role-name "$ROLE"
-done
+---
+
+## Project Structure
+
+```
+mcp_server_project/
+├── mcp_server.py                 # MCP server implementation
+├── my_mcp_client.py             # Local testing client
+├── my_mcp_client_remote.py      # Remote (Cognito-authenticated) client
+├── invoke_mcp_tools.py          # Remote invocation demo (tool calls)
+├── requirements.txt
+└── notebooks/
+    ├── hosting_mcp_server.ipynb                # Main tutorial notebook
+    └── runtime_with_strands_and_bedrock.ipynb # Additional runtime examples
 ```
 
-also clean up the local config
+---
+
+## Local Development
+
+### Start the MCP server
+
 ```bash
-rm -f .bedrock_agentcore.yaml
+python mcp_server.py
 ```
 
+### List available tools
+
+```bash
+python my_mcp_client.py
+```
+
+---
+
+## Deploy to AgentCore Runtime
+
+Deployment is handled via the **AgentCore Starter Toolkit**, which:
+
+* Generates a Dockerfile
+* Builds and pushes container to ECR
+* Creates an AgentCore Runtime
+* Configures OAuth via Cognito
+
+Run the deployment steps in the accompanying notebook:
+
+* **Hosting MCP Server on Amazon Bedrock AgentCore Runtime – OAuth Inbound Authentication**
+
+
+This notebook creates:
+
+* Cognito User Pool + App Client
+* JWT-based authorizer configuration
+* AgentCore Runtime instance
+* SSM + Secrets Manager entries for connection details
+
+---
+
+## Remote Invocation
+
+Once deployed, you can test the MCP server using:
+
+```bash
+python my_mcp_client_remote.py
+```
+
+Or invoke specific tools:
+
+```bash
+python invoke_mcp_tools.py
+```
+
+The clients automatically:
+
+* Fetch Agent ARN from SSM
+* Fetch Cognito tokens (and refresh when needed)
+* Connect to the MCP server over **streamable HTTP**
+* Perform `initialize`, `list_tools`, and `call_tool` operations
+
+---
+
+## Requirements
+
+* Python 3.10+
+* AWS credentials configured
+* Docker
+* Amazon Bedrock AgentCore Starter Toolkit
+* FastMCP & MCP libraries
+
+Full dependencies listed in:
+
+* **requirements.txt**
+
+Notebooks reference:
+
+* AWS Show & Tell session: AgentCore + Gateway deep dive
+
+* AgentCore Runtime tutorial with Strands Agents
+
+
+---
+
+## Cleanup
+
+To remove deployed resources, use the cleanup section in the notebook:
+
+* Deletes AgentCore runtime
+* Removes ECR repo
+* Removes SSM parameter + Secrets Manager entries
+* always check manually via thee AWS console to ensure that the cleanup has been effective
