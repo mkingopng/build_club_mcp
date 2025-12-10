@@ -12,9 +12,9 @@ ENV UV_SYSTEM_PYTHON=1 \
 
 
 
-COPY . .
-# Install from pyproject.toml directory
-RUN cd . && uv pip install .
+COPY requirements.txt requirements.txt
+# Install from requirements file
+RUN uv pip install -r requirements.txt
 
 
 
@@ -38,4 +38,4 @@ COPY . .
 
 # Use the full module path
 
-CMD ["opentelemetry-instrument", "python", "-m", "mcp_server"]
+CMD ["opentelemetry-instrument", "python", "-m", "strands_claude"]
